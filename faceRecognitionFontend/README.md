@@ -1,21 +1,21 @@
-# face_recognition_fontend
+# 人脸识别前端部分
 
 > fontend part
 
 ## Build Setup
 
 ``` bash
-# install dependencies
+# 安装相关依赖
 npm install
 
-# serve with hot reload at localhost:8080
+# 启动项目
 npm run dev
 
-# build for production with minification
+# 打包项目
 npm run build
 
-# build for production and view the bundle analyzer report
-npm run build --report
 ```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## 部分截图
+![](https://ae01.alicdn.com/kf/U03a5e3a30c394b0da46a6c6963879d33M.jpg)
+![](https://ae01.alicdn.com/kf/Ub6c2f4ad12004c08814ecb48c900f391d.jpg)
+![](https://ae01.alicdn.com/kf/Ub1f36f7af32d47beae8dda428530f4f4t.jpg)
