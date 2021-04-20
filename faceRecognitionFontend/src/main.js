@@ -5,7 +5,7 @@ import Vue from 'vue'
 import App from './App'
 import axios from 'axios'
 import router from './router'
-import { Button,NavBar,Popup } from "vant";
+import { Button,NavBar,Popup,Toast,Popover,Field,Uploader } from "vant";
 import '../static/global.css'
 
 axios.defaults.baseURL = "http://127.0.0.1:5000" // 添加baseUrl
@@ -15,6 +15,13 @@ Vue.prototype.$http = axios
 Vue.use(NavBar)
 Vue.use(Button)
 Vue.use(Popup)
+Vue.use(Toast)
+Vue.use(Popover);
+Vue.use(Field);
+Vue.use(Uploader);
+
+
+
 new Vue({
   el: '#app',
   router,
