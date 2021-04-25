@@ -4,6 +4,7 @@ import Login from '../components/Login.vue'
 import Home from '../components/Home.vue'
 import AdminProfile from '../components/function/AdminProfile.vue'
 import ManageFace from '../components/function/ManageFace.vue'
+import AdminManage from '../components/function/AdminManage.vue'
 Vue.use(Router)
 //π“‘ÿ¬∑”…µº∫Ω ÿŒ¿
  
@@ -33,6 +34,7 @@ const router = new Router({
       path: '/home', component: Home, redirect: '/profile', children: [
         { path: '/profile', component: AdminProfile },
         { path: '/allface', component: ManageFace },
+        { path:'/admin',component:AdminManage}
       ]
     }
   ]

@@ -31,6 +31,9 @@
             <el-form-item label="账号" prop="id">
               <el-input type="text" v-model="regForm.id"></el-input>
             </el-form-item>
+             <el-form-item label="姓名" prop="name">
+              <el-input type="text" v-model="regForm.name"></el-input>
+            </el-form-item>
             <el-form-item label="密码" prop="pwd1">
               <el-input type="password" v-model="regForm.pwd1"></el-input>
             </el-form-item>
@@ -98,11 +101,12 @@
         captchaImg: '',
         uuid: '',
         regForm: {
-          id: '134',
-          pwd1: '123',
-          pwd2: '123',
-          code: '1234',
-          mobile: '18323667740',
+          id: '',
+          pwd1: '',
+          pwd2: '',
+          name:'',
+          code: '',
+          mobile: '',
         },
 
         loginForm: {
@@ -138,6 +142,11 @@
           id: [{
             required: true,
             message: '请输入账号',
+            trigger: 'blur'
+          }, ],
+           name: [{
+            required: true,
+            message: '请输入姓名',
             trigger: 'blur'
           }, ],
           pwd1: [{
@@ -209,7 +218,8 @@
               pwd: this.regForm.pwd1,
               code: this.regForm.code,
               mobile: this.regForm.mobile,
-              codeid: this.uuid
+              codeid: this.uuid,
+              name:this.regForm.name
             })
             console.log(res.data);
             if (res.data.code != 201) {
@@ -309,7 +319,7 @@
   .bform {
     width: 100%;
     height: 40%;
-    padding: 2em 0;
+    padding: 2.5em 0;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -423,7 +433,7 @@
   }
 
   #form1 {
-    padding: 3em;
+    padding: 4.7em;
   }
 
 </style>

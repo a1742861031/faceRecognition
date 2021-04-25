@@ -25,17 +25,3 @@ def getProfile():
                          'name': user.Name})
 
 
-@api.route('/allface', methods=["GET"])
-# @Utils.login_required
-def getAllFace():
-    """获取所有注册过的人脸信息"""
-    # path：L:\毕设项目\keras-face-recognition-master\face_dataset
-    users = models.User.query.all()
-    data = []
-    for user in users:
-        f = open(r'L:\毕设项目\keras-face-recognition-master\face_dataset\\' + user.Name + '.jpg', 'rb')  # 二进制方式打开图文件
-        img_base64 = base64.b64encode(f.read())
-        image = img_base64.decode()
-        f.close()
-        data.append({'id': user.id, 'mobile': user.mobile, 'name': user.Name, 'image': image})
-    return jsonify(code=200, msg="获取图片信息成功", data=data)

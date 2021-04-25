@@ -19,12 +19,13 @@ def register():
     mobile = req_dict.get("mobile")
     id = req_dict.get("id")
     pwd = req_dict.get("pwd")
+    name = req_dict.get("name")
     # 图片验证码错误
     if (str(redis_store.get("image_code_%s" % codeid))[2:6]).lower() != code.lower():
         return jsonify(code=4001, msg="图片验证码错误")
     # 图片验证码正确
     else:
-        user = models.User(id=id, mobile=mobile, state=0, avatar_url='')
+        user = models.User(id=id, mobile=mobile, state=0, avatar_url='', Name=name, isSuperAdmin=0)
         user.password = pwd  # 这里会自动调用装饰器里的函数
         try:
             db.session.add(user)

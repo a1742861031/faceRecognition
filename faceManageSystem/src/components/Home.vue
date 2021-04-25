@@ -3,7 +3,7 @@
     <!-- 头部区域 -->
     <el-header>
       <div>
-        <img src="../assets/logo.png"  height="80px" />
+        <img src="../assets/logo.png" height="80px" />
         <el-dropdown>
           <span class="el-dropdown-link">
             用户{{ profile.id }}已登录<i class="el-icon-arrow-down el-icon--right"></i>
@@ -25,9 +25,9 @@
         <!-- <el-menu background-color="#e1e6e5" text-color="#409ef"  :router="true"
           :default-active="activePath"> -->
         <el-menu background-color="#e1e6e5" :router="true">
-          <el-menu-item index="user">
+          <el-menu-item index="admin">
             <i class="el-icon-user"></i>
-            <span slot="title">用户管理</span>
+            <span slot="title">管理员管理</span>
           </el-menu-item>
           <el-menu-item index="allface">
             <i class="el-icon-picture-outline"></i>
@@ -83,7 +83,7 @@
         if (res.data.data.isSuperAdmin = 0)
           this.profile.issuper = '否'
         else
-          this.profile.issuper = '是' 
+          this.profile.issuper = '是'
         console.log(this.profile);
       }
     }
@@ -129,14 +129,14 @@
   .el-dropdown {
     float: right;
     position: relative;
-    margin-top: 33px; 
+    margin-top: 33px;
     margin-right: 100px;
   }
 
   .el-dropdown-link {
     cursor: pointer;
     color: #409eff;
-  
+
   }
 
   .el-icon-arrow-down {
