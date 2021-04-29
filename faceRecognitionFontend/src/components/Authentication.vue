@@ -100,15 +100,15 @@
           data: res
         } = await this.$http.post('recongise', formData, config)
         this.$toast.clear() //清除加载框  
-        if (res != 'Unknown')
+        if (res.code==200)
           Notify({
             type: 'primary',
-            message: `认证成功，用户为：${res}`
+            message: `认证成功，用户为：${res.data}`
           });
         else
           Notify({
             type: 'warning',
-            message: `认证失败，无此人`
+            message: res.msg
           });
       },
       showAuthModel() {

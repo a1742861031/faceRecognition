@@ -25,7 +25,7 @@
         <!-- <el-menu background-color="#e1e6e5" text-color="#409ef"  :router="true"
           :default-active="activePath"> -->
         <el-menu background-color="#e1e6e5" :router="true">
-          <el-menu-item index="admin">
+          <el-menu-item index="admin"  v-if="profile.issuper">
             <i class="el-icon-user"></i>
             <span slot="title">管理员管理</span>
           </el-menu-item>
@@ -54,7 +54,7 @@
         profile: {
           id: '',
           mobile: '',
-          issuper: '',
+          issuper: false,
         }
       };
     },
@@ -80,11 +80,10 @@
         const res = await this.$http.get("profile");
         this.profile.id = res.data.data.id;
         this.profile.mobile = res.data.data.mobile
-        if (res.data.data.isSuperAdmin = 0)
-          this.profile.issuper = '否'
+        if (res.data.data.isSuperAdmin == 0)
+          this.profile.issuper = false
         else
-          this.profile.issuper = '是'
-        console.log(this.profile);
+          this.profile.issuper = true
       }
     }
   }

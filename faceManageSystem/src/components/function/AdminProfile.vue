@@ -32,19 +32,21 @@
               <div class="pull-right">{{profile.name}}</div>
             </li>
             <br />
-            <li class="list-group-item el-icon-info">是否为管理员：<div class="pull-right">{{profile.issuper}}</div>
+            <li class="list-group-item el-icon-info">是否为超级管理员：<div class="pull-right">{{profile.issuper}}</div>
             </li>
           </ul>
         </el-card>
       </el-col>
-      <el-col :span="7" class="form2">
+      <el-col :span="9" class="form2">
         <el-card>
           <div slot="header" class="clearfix">
             <span>刷脸信息统计</span>
           </div>
+          <div id="myChart" :style="{width: '100%', height: '400px'}"></div>
         </el-card>
       </el-col>
     </el-row>
+
   </div>
 
 </template>
@@ -57,22 +59,68 @@
           id: '',
           mobile: '',
           issuper: '',
-          name: ''
-        }
+          name: '',
+        },
+        records: {
+          time: [],
+          num: [],
+        },
+        time:['3-24','3-25'],
+        num:[2,7]
       }
     },
+
     methods: {
       async getProfile() {
         const res = await this.$http.get("profile");
         this.profile.id = res.data.data.id;
         this.profile.mobile = res.data.data.mobile
         this.profile.name = res.data.data.name
-        if (res.data.data.isSuperAdmin = 0)
+        if (res.data.data.isSuperAdmin == 0)
           this.profile.issuper = '否'
         else
           this.profile.issuper = '是'
         console.log(this.profile);
+      },
+      async getRecords() {
+        const {
+          data: res
+        } = await this.$http.get("/getAll");
+        let data = res.data;
+        for (let i = 0; i < data.length; i++) {
+          this.records.time.push(data[i].time)
+          this.records.num.push(data[i].num)
+        }
+        this.drawLine()
+
+      },
+      drawLine() {
+        // 基于准备好的dom，初始化echarts实例
+        //this.getRecords()
+        let xdata = this.records.time;
+        let ydata = this.records.num;
+        let myChart = this.$echarts.init(document.getElementById('myChart'))
+        myChart.clear();
+        window.onresize = myChart.resize // 加这行代码，没错！
+        // 绘制图表
+        myChart.setOption({
+
+          tooltip: {},
+          xAxis: {
+            data: xdata
+          },
+          yAxis: {},
+          series: [{
+            name: '刷脸次数',
+            type: 'line',
+            data: ydata
+          }]
+        });
       }
+
+    },
+    mounted() {
+      this.getRecords()
     },
     created() {
       this.getProfile();

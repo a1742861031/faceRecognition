@@ -12,6 +12,30 @@
         </el-input>
       </el-col>
     </el-row>
+    <el-button style="margin-top:5px" type="success" @click="addFaceDialogVisible = true">添加人脸</el-button>
+    <el-dialog title="注册人脸" :visible.sync="addFaceDialogVisible" width="30%">
+      <el-form ref="addFaceForm" :model="addFaceForm" label-width="80px">
+        <el-form-item label="姓名">
+          <el-input v-model="addFaceForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-switch v-model="addFaceForm.state" active-color="#13ce66" inactive-color="#ff4949">
+          </el-switch>
+        </el-form-item>
+        <el-form-item label="人脸照片" prop="imageSrc">
+          <el-upload class="avatar-uploader" action="" :show-file-list="false" :on-change="addImage">
+
+            <img v-if="addFaceForm.imageSrc" :src="addFaceForm.imageSrc" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addFaceDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addFace">确 定</el-button>
+      </span>
+    </el-dialog>
     <el-card class="faceCard">
       <el-row>
         <el-table :data="faceData.slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%">
@@ -66,6 +90,27 @@
                 <el-button type="danger" icon="el-icon-delete" @click="openDeleteBox(scope.row.id)">
                 </el-button>
               </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="查看刷脸记录" placement="bottom-start">
+                <el-button type="success" icon="el-icon-search" @click="openOnePersonFaceModel(scope.row.id)">
+                </el-button>
+              </el-tooltip>
+              <el-dialog title="刷脸记录" :visible.sync="faceRecordModel" width="60%">
+                <div class="block">
+                  <el-timeline>
+                    <el-timeline-item :timestamp="item.time" placement="top"  v-for="item in recordOnePerson" :key="item.time">
+                      <el-card>
+                        <h4>刷脸设备的ip地址为{{item.ip}}</h4>
+                        <p>{{item.name}}于{{item.time}}刷脸</p>
+                           <el-image class="view-img1" :src="'data:image/jpeg;base64,'+item.image" ></el-image>
+                      </el-card>
+                    </el-timeline-item>
+                  </el-timeline>
+                </div>
+                <span slot="footer" class="dialog-footer">
+                  <el-button @click="faceRecordModel = false">取 消</el-button>
+                  <el-button type="primary" @click="faceRecordModel = false">确 定</el-button>
+                </span>
+              </el-dialog>
             </template>
           </el-table-column>
         </el-table>
@@ -94,12 +139,31 @@
           imageSrc: '',
           state: ''
         },
-    
-
+        addFaceForm: {
+          state: false,
+          name: '',
+          imageSrc: ''
+        },
+        addFaceDialogVisible: false,
+        faceRecordModel: false,
+        recordOnePerson:[{
+         
+        }]
       }
     },
 
     methods: {
+      async addFace() {
+        const res = await this.$http.post("/addFace", this.addFaceForm)
+        if (res.data.code == 201) {
+          this.$message.success("注册人脸照片成功");
+          this.addFaceDialogVisible = false
+          this.getFace()
+        } else {
+          this.$message.error("注册失败!")
+          this.addFaceDialogVisible = false
+        }
+      },
       async getFace() {
         let res;
         if (this.queryFace == '')
@@ -118,6 +182,10 @@
           this.pages = this.faceData.length
         }
       },
+      async openOnePersonFaceModel(id) {
+        this.faceRecordModel = true
+        this.getOnePersonRecord(id)
+      },
       async deleteFace(id) {
         const res = await this.$http.delete('/face', {
           params: {
@@ -128,10 +196,18 @@
           this.$message.success("删除成功")
         else
           this.$message.error("删除失败")
-
+        this.getFace()
       },
 
-
+      handleAvatarSuccess(res, file) {
+        var This = this;
+        var reader = new FileReader();
+        reader.readAsDataURL(file.raw);
+        reader.onload = function () {
+          // this.result // 这个就是base64编码了
+          This.addFaceForm.imageSrc = this.result
+        }
+      },
       handelCurrentChange(currentPage) {
         console.log(currentPage);
         this.currentPage = currentPage
@@ -157,8 +233,18 @@
         reader.readAsDataURL(file.raw);
         reader.onload = function () {
           // this.result // 这个就是base64编码了
-          console.log(this.result);
           This.oneFace.imageSrc = this.result
+        }
+      },
+      addImage(file) {
+        var This = this;
+        var reader = new FileReader();
+        reader.readAsDataURL(file.raw);
+        reader.onload = function () {
+          console.log(this.result);
+          // this.result // 这个就是base64编码了
+          This.addFaceForm.imageSrc = this.result
+          console.log(This.addFaceForm.imageSrc);
         }
       },
       async uploadOneFace() {
@@ -197,10 +283,25 @@
           this.oneFace.name = res.data.data.name;
         }
       },
+      async getOnePersonRecord(id)
+      {
+        const {data:res} = await this.$http.get("/getRecordById",{
+          params:{
+            id:id
+          }
+        })
+        if(res.code==200)
+        {
+          this.$message.success("获取刷脸记录成功")
+          this.recordOnePerson = res.data;
+          console.log(this.recordOnePerson);
+          
+        }
+      },
+
       openFaceModel(id) {
         this.getOneFace(id)
         this.faceDialogVisible = true
-
       }
     },
     created() {
@@ -245,5 +346,8 @@
   .search {
     margin-top: 10px;
   }
-
+.view-img1{
+  height: 200px;
+  width: 200px;
+}
 </style>

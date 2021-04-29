@@ -8,7 +8,7 @@ import router from './router'
 import { Button,NavBar,Popup,Toast,Popover,Field,Uploader } from "vant";
 import '../static/global.css'
 
-axios.defaults.baseURL = "http://127.0.0.1:5000" // 添加baseUrl
+axios.defaults.baseURL = "http://127.0.0.1:5000/api/facereg/" // 添加baseUrl
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
 /* eslint-disable no-new */

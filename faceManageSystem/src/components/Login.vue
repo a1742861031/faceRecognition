@@ -31,7 +31,7 @@
             <el-form-item label="账号" prop="id">
               <el-input type="text" v-model="regForm.id"></el-input>
             </el-form-item>
-             <el-form-item label="姓名" prop="name">
+            <el-form-item label="姓名" prop="name">
               <el-input type="text" v-model="regForm.name"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="pwd1">
@@ -104,7 +104,7 @@
           id: '',
           pwd1: '',
           pwd2: '',
-          name:'',
+          name: '',
           code: '',
           mobile: '',
         },
@@ -144,7 +144,7 @@
             message: '请输入账号',
             trigger: 'blur'
           }, ],
-           name: [{
+          name: [{
             required: true,
             message: '请输入姓名',
             trigger: 'blur'
@@ -188,24 +188,27 @@
       login() {
         this.$refs.loginForm.validate(async (valid) => {
           if (valid) {
-              const res = await this.$http.post('sessions',{
-                id:this.loginForm.id,
-                code:this.loginForm.code,
-                pwd:this.loginForm.pwd,
-                codeid:this.uuid
-              })
-              if(res.data.code == 200)
-                {
-                  //登录成功
-                  this.$message.success(res.data.msg);
-                   this.$refs.loginForm.resetFields();
-                   localStorage.setItem("id",this.loginForm.id)
-                   this.$router.push('/home')
-                  }
-                else{
-                  this.$message.error(res.data.msg);
-                  this.$refs.loginForm.resetFields();
-                }
+            const res = await this.$http.post('sessions', {
+              id: this.loginForm.id,
+              code: this.loginForm.code,
+              pwd: this.loginForm.pwd,
+              codeid: this.uuid
+            })
+            if (res.data.code == 200) {
+              console.log(res.data);
+              //登录成功
+              if (res.data.data.stata == false) {
+                this.$message.warning("该账号已停用，请联系管理员")
+                return
+              }
+              this.$message.success(res.data.msg);
+              this.$refs.loginForm.resetFields();
+              localStorage.setItem("id", this.loginForm.id)
+              this.$router.push('/home')
+            } else {
+              this.$message.error(res.data.msg);
+              this.$refs.loginForm.resetFields();
+            }
           } else
             return
         })
@@ -219,13 +222,13 @@
               code: this.regForm.code,
               mobile: this.regForm.mobile,
               codeid: this.uuid,
-              name:this.regForm.name
+              name: this.regForm.name
             })
             console.log(res.data);
             if (res.data.code != 201) {
               this.getCode();
               this.$message.error(res.data.msg);
-                this.$refs.regForm.resetFields();
+              this.$refs.regForm.resetFields();
             } else {
               this.$message.success(res.data.msg);
               this.$refs.regForm.resetFields();

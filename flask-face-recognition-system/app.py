@@ -1,12 +1,12 @@
-from flask import Flask
-
-app = Flask(__name__)
+# 启动falsk服务端项目
 
 
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
+from faceRec import create_app, db
+from  faceRec import controller
+# 创建app
+app = create_app()
+dododo = controller.face_rec()
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run()
+    # manager.run()

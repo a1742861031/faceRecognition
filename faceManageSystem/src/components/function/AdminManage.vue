@@ -16,6 +16,16 @@
           <el-table-column label="电话" prop="mobile">
 
           </el-table-column>
+           <el-table-column label="是否是超管" prop="isSuperAdmin">
+            <template slot-scope="scope">
+              <el-tag type="success" v-show="scope.row.isSuperAdmin==1" effect="dark">
+                是
+              </el-tag>
+              <el-tag v-show="scope.row.isSuperAdmin==0" type="warning" effect="dark">
+                否  
+              </el-tag>
+            </template>
+          </el-table-column>
           <el-table-column label="状态" prop="state">
             <template slot-scope="scope">
               <el-tag type="success" v-show="scope.row.state==1" effect="dark">
